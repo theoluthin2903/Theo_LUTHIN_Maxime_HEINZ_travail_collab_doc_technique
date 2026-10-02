@@ -1,1 +1,1 @@
-# Th-o_LUTHIN_repo_test_cours_doc_technique
+# Theo_LUTHIN_repo_test_cours_doc_technique
