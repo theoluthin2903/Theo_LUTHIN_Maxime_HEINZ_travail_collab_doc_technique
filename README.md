@@ -141,9 +141,18 @@ Procfile                        Deployment startup command
 
 [Open Smart Fridge on Scalingo](https://theol-smartfridgeapp.osc-fr1.scalingo.io)
 
-## Project brief
+## 📚 Documentation
 
-The full project brief is available in [`Project Brief Smart Fridge & Nutrition Coach (1).pdf`](./Project%20Brief%20Smart%20Fridge%20%26%20Nutrition%20Coach%20(1).pdf).
+### Documentation technique
+- [Technical Documentation (EN)](./Smart_Fridge_Technical_Documentation_V2_EN.md)
+- [Documentation technique (FR)](./Documentation_Technique_Smart_Fridge_V2.md)
+
+### Architecture Decision Records (ADR)
+- [ADR (EN)](./Smart_Fridge_ADR_V2_EN.md)
+- [ADR (FR)](./Smart_Fridge_ADR_V2_FR.md)
+
+### Project brief
+- [Project Brief (PDF)](<./Project Brief Smart Fridge & Nutrition Coach (1).pdf>)
 
 ## Authors
 
