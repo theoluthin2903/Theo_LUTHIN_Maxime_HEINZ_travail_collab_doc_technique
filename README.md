@@ -2,8 +2,6 @@
 
 Smart Fridge is a web application that helps users manage the food stored in their refrigerator. It lets them track expiration dates, identify products that should be used soon, and find nutritional information or recipe ideas based on the products they have available.
 
-The project was created by **Théo LUTHIN** and **Maxime HEINZ**.
-
 ## Main features
 
 - User registration, login, and profile management.
