@@ -1,125 +1,153 @@
 # 🧊 Smart Fridge & Nutrition Coach
 
-A web application that lets you manage the contents of your refrigerator, track expiration dates, receive alerts, and get nutritional information and recipe ideas based on the products you have available.
+Smart Fridge is a web application that helps users manage the food stored in their refrigerator. It lets them track expiration dates, identify products that should be used soon, and find nutritional information or recipe ideas based on the products they have available.
 
-Project created by **Théo L.** and **Maxime**.
+The project was created by **Théo LUTHIN** and **Maxime HEINZ**.
 
-## ✨ Features
+## Main features
 
-- **User authentication** (registration, login, profile management).
-- **Fridge management**: add, edit, and delete stored products.
-- **Product catalog** with nutritional data retrieval (via the USDA API) and associated recipes (via TheMealDB).
-- **Automatic alerts** for expired or soon-to-expire products.
-- **Nutrition coach** based on the products currently in the fridge.
-- **Admin panel** with:
-  - statistics (users, admins, products, expired/soon-to-expire products);
-  - chart of account creations over the last 7 days;
-  - product breakdown by category;
-  - activity log (`admin_logs`);
-  - user management (role, deletion, password reset);
-  - quick actions and automatic alerts.
-- **Responsive** interface, **dark mode** compatible.
+- User registration, login, and profile management.
+- Add, edit, and remove products from the fridge.
+- Alerts for expired products and products that are close to expiring.
+- Search for nutritional information and recipes.
+- Nutrition tracking and meal-planning tools.
+- Admin area for viewing statistics and managing users.
+- Responsive interface with dark mode support.
 
-## 🛠️ Tech Stack
+## Prerequisites
 
-- **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python)
-- **ORM / Database**: **Supabase**
-- **Frontend**: server-side rendered pages, styled with Tailwind CSS
-- **Authentication**: middleware + JWT (Bearer) support documented in the OpenAPI schema
-- **External APIs**: USDA FoodData Central (nutritional data), TheMealDB (recipes)
+- **Python 3.13**, as specified in the project's `.python-version` file.
+- **Git** to clone the repository.
+- **pip**, included with Python.
+- A web browser.
+- An Internet connection for external services (USDA and TheMealDB).
 
-## 📁 Project Structure
+A USDA API key is required to search FoodData Central for nutritional information. The application can run without this key, but USDA searches will return no results. Recipes are provided by TheMealDB.
 
-```
-.
-├── app/                 # Application code (routers, web pages, database, business logic)
-├── routers/             # API routes
-├── static/              # Static files (CSS, JS, images)
-├── main.py              # FastAPI application entry point
-├── create_admin.py      # Script to create an administrator account
-├── migrate_sqlite_to_supabase.py   # SQLite → Supabase migration script
-├── test_supabase_connection.py     # Supabase connection test script
-├── requirements-supabase.txt       # Supabase-specific dependencies (psycopg, python-dotenv)
-└── Project Brief Smart Fridge & Nutrition Coach.pdf   # Project requirements document
+## Get and run the application
+
+In a terminal, clone the repository and change to its directory:
+
+```bash
+git clone https://github.com/theoluthin2903/Theo_L_Maxime_Projet_Smart_Fridge.git
+cd Theo_L_Maxime_Projet_Smart_Fridge
 ```
 
-## 🚀 Installation
+Create and activate a virtual environment.
 
-### Prerequisites
+**Windows (PowerShell):**
 
-- Python 3.10+
-- pip
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-### Steps
+**macOS / Linux:**
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/theoluthin2903/Theo_L_Maxime_Projet_Smart_Fridge.git
-   cd Theo_L_Maxime_Projet_Smart_Fridge
-   ```
+```bash
+python3.13 -m venv .venv
+source .venv/bin/activate
+```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate   # On Windows: venv\Scripts\activate
-   ```
+Install the dependencies and start the server:
 
-3. Install the project dependencies (see `requirements.txt` at the root):
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python -m uvicorn main:app --reload
+```
 
-4. (Optional) If you want to use **Supabase** as your database instead of SQLite, also install:
-   ```bash
-   pip install -r requirements-supabase.txt
-   ```
-   then configure your environment variables (e.g. `DATABASE_URL`) in a `.env` file at the project root.
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. Interactive API documentation is available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
-5. Run the application:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   ou
-   ```bash
-   python -m uvicorn main:app --reload
-   ```
-   The application is then available at [http://127.0.0.1:8000].
+### Optional configuration
 
-## 👑 Creating an Administrator Account
+By default, the application uses a local SQLite database named `smartfridge.db`, created in the project directory. To enable USDA searches, create a `.env` file in the project root and add your key:
+
+```dotenv
+USDA_API_KEY=your_usda_api_key
+```
+
+#### Get a USDA API key
+
+1. Open the official [USDA FoodData Central API guide](https://fdc.nal.usda.gov/api-guide.html).
+2. Follow the **Sign up to obtain a key** link to the data.gov registration form.
+3. Complete the form with your email address and submit it. Your API key will be sent to that email address.
+4. Copy the key into the `USDA_API_KEY` entry in your root `.env` file, as shown above, then restart the application.
+
+Keep the key private: do not commit `.env` to Git or publish the key. The USDA documents a default rate limit of 1,000 requests per hour per IP address; exceeding it can temporarily block the key.
+
+To use a PostgreSQL database hosted on Supabase instead of SQLite, also set `DATABASE_URL` in this file to the connection URL provided by Supabase:
+
+```dotenv
+DATABASE_URL=replace_with_the_postgresql_url_provided_by_supabase
+```
+
+The PostgreSQL driver is included in `requirements.txt`. Do not share your `.env` file: it may contain credentials or private keys.
+
+### Create an administrator account
+
+This step is optional. After installing the dependencies, run:
 
 ```bash
 python create_admin.py
 ```
 
-The password is not displayed while you type it in the terminal: just type it normally, then press Enter.
+Enter an email address and a password of at least six characters when prompted. The password is not displayed while you type. The account can access the admin area at `/admin`.
 
-Then log in with this account and go to `/admin` to access the admin panel.
+### Use Supabase and migrate SQLite data
 
-## ☁️ Migrating to Supabase
+This is only necessary if you want to use Supabase. First, configure `DATABASE_URL` in `.env`. To test the connection:
 
-The project can run with SQLite (default) or with a PostgreSQL database hosted on Supabase.
+```bash
+python test_supabase_connection.py
+```
 
-1. Configure your Supabase connection in `.env`.
-2. Test the connection:
-   ```bash
-   python test_supabase_connection.py
-   ```
-3. Migrate your existing data from SQLite:
-   ```bash
-   python migrate_sqlite_to_supabase.py
-   ```
+To copy data from the local `smartfridge.db` database to the configured database:
 
-> ℹ️ The `admin_logs` table is created automatically via `Base.metadata.create_all(bind=engine)` when the application starts. If your project already has a migration system, remember to add this table to it.
+```bash
+python migrate_sqlite_to_supabase.py
+```
 
-## 📄 Project Documentation
+The migration script requires an existing SQLite database and a valid Supabase URL.
 
-The full project brief is available in the file [`Project Brief Smart Fridge & Nutrition Coach.pdf`](./Project%20Brief%20Smart%20Fridge%20%26%20Nutrition%20Coach%20(1).pdf).
+## Known limitations
 
-## Link to the app deployed on Scalingo
+- Users must enter and keep their fridge contents up to date; the application does not detect food using sensors.
+- Nutritional information and recipes depend on third-party services. Their availability, coverage, and results are not guaranteed by the application.
+- Without `USDA_API_KEY`, USDA nutritional searches return no results. An Internet connection is also required to access external services.
+- With the default SQLite setup, data is stored in the local `smartfridge.db` file. It is not shared between installations and must be backed up separately.
+- This is an educational project. Before production use, the CORS configuration should be restricted and the application configuration, secrets, and database should be secured.
 
-https://theol-smartfridgeapp.osc-fr1.scalingo.io
+## Key files
 
-## 👥 Authors
+```text
+main.py                         FastAPI entry point, database table creation, and router registration
+app/
+  db/database.py                SQLite / PostgreSQL configuration and database access
+  db/models.py                  SQLAlchemy data models
+  core/                         Shared security, authentication, and business logic
+  routers/                      API routes (authentication and profile)
+  web/
+    pages/                      Web page routes (fridge, recipes, alerts, admin, etc.)
+    data.py                     Data access and external API calls
+    nutrition_engine.py         Nutritional calculations
+static/styles.css               Interface stylesheet
+requirements.txt                Python dependencies
+create_admin.py                 Create or promote an administrator account
+migrate_sqlite_to_supabase.py   Migrate SQLite data to PostgreSQL / Supabase
+test_supabase_connection.py     Test the Supabase database connection
+Procfile                        Deployment startup command
+```
+
+## Deployed application
+
+[Open Smart Fridge on Scalingo](https://theol-smartfridgeapp.osc-fr1.scalingo.io)
+
+## Project brief
+
+The full project brief is available in [`Project Brief Smart Fridge & Nutrition Coach (1).pdf`](./Project%20Brief%20Smart%20Fridge%20%26%20Nutrition%20Coach%20(1).pdf).
+
+## Authors
 
 - Théo LUTHIN
 - Maxime HEINZ
